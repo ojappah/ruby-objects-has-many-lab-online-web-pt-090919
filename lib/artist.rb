@@ -1,23 +1,31 @@
 class Artist
   attr_accessor :name
 
+  @@all = []
+
   def initialize(name)
-    @songs = []
     @name = name
+    @@all << self
   end
 
-  def songs
-    @songs
+  def self.all
+    @@all
   end
 
   def add_song(song)
-    @songs << song
     song.artist = self
   end
 
-  def genres                        #=> This is how the other two
-    self.songs.collect do |song|    #=> classes talk to each other
-      song.genre
-    end
+  def add_song_by_name(name)
+    song = Song.new(name)
+    song.artist = self
+  end
+
+  def songs
+    Song.all.select {|song| song.artist == self}
+  end
+
+  def self.song_count
+    Song.all.count
   end
 end
